@@ -33,12 +33,14 @@
 .jquery-ui-bmi-results{
     width: 100%;
     border-collapse: collapse;
+    color: #A7A7A7;
 }
 
 .jquery-ui-bmi-results thead{
     font-weight: bold;        
     text-align: left;
     line-height: 1.9em;
+    color: black;
 }
 
 .jquery-ui-bmi-results thead th{
