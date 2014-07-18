@@ -28,11 +28,11 @@ and open the template in the editor.
             <div class="jquery-ui-bmi-content">
                 <div class="jquery-ui-bmi-row">
                 <div class="jquery-ui-bmi-cell">
-                    <div>Зріст (см)</div>
+                    <div>Зріст <span id="jquery-ui-bmi-height-value"></span> см</div>
                     <div id="jquery-ui-bmi-height" class="jquery-ui-bmi-slider"></div>
                 </div>
                 <div class="jquery-ui-bmi-cell">
-                    <div>Вага (кг)</div>
+                    <div>Вага <span id="jquery-ui-bmi-weight-value"></span> кг</div>
                     <div id="jquery-ui-bmi-weight" class="jquery-ui-bmi-slider"></div>
                 </div>
             </div>  
@@ -40,10 +40,10 @@ and open the template in the editor.
                 <thead>
                     <tr>
                         <th>Результат</th>
-                        <th>25.97</th>
+                        <th id="jquery-ui-bmi-result">25.97</th>
                     </tr>
                 </thead>
-                <tbody>                    
+                <tbody id="jquery-ui-bmi-results-diagnosis">                    
                     <tr>
                         <td>нижче норми</td>
                         <td>менше 18.5</td>
