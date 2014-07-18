@@ -24,8 +24,9 @@ and open the template in the editor.
     </head>
     <body>
         <div class="container jquery-ui-bmi">
-            <div class="jquery-ui-bmi-header">Чи є в мене зайва вага?</div>
-            <div class="jquery-ui-bmi-row">
+            <div class="jquery-ui-bmi-header ui-state-default">Чи є в мене зайва вага?</div>
+            <div class="jquery-ui-bmi-content">
+                <div class="jquery-ui-bmi-row">
                 <div class="jquery-ui-bmi-cell">
                     <div>Зріст (см)</div>
                     <div id="jquery-ui-bmi-height" class="jquery-ui-bmi-slider"></div>
@@ -34,9 +35,44 @@ and open the template in the editor.
                     <div>Вага (кг)</div>
                     <div id="jquery-ui-bmi-weight" class="jquery-ui-bmi-slider"></div>
                 </div>
-            </div>
+            </div>  
+            <table class="jquery-ui-bmi-results"> 
+                <thead>
+                    <tr>
+                        <th>Результат</th>
+                        <th>25.97</th>
+                    </tr>
+                </thead>
+                <tbody>                    
+                    <tr>
+                        <td>нижче норми</td>
+                        <td>менше 18.5</td>
+                    </tr>
+                    <tr>
+                        <td>норма</td>
+                        <td>від 18.5 до 25</td>
+                    </tr>
+                    <tr>
+                        <td>зайва вага</td>
+                        <td>від 25 до 30</td>
+                    </tr>
+                    <tr>
+                        <td>ожиріння 1 стадії</td>
+                        <td>від 30 до 35</td>
+                    </tr>
+                    <tr>
+                        <td>ожиріння 2 стадії</td>
+                        <td>від 35 до 40</td>
+                    </tr>
+                    <tr>
+                        <td>ожиріння 3 стадії</td>
+                        <td>понад 40</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>  
         </div>
-        
+
         <script type="text/javascript" src="js/libs/jquery-2.1.1.min.js"></script>
         <script type="text/javascript" src="js/libs/jquery-ui-1.11.0.min.js"></script>
         <script type="text/javascript" src="js/jquery.ui.bmi.js"></script>
