@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/jquery-ui.css" rel="stylesheet"/>
+        <link href="css/jquery-ui.theme.css" rel="stylesheet"/>
+        <link href="css/jquery.ui.bmi.css" rel="stylesheet"/>
+        <style>
+            .body{
+                text-align: right;
+            }
+            .container{
+                max-width: 320px;
+                outline: 1px solid lightgrey; 
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container jquery-ui-bmi">
+            <div class="jquery-ui-bmi-header">Чи є в мене зайва вага?</div>
+            <div class="jquery-ui-bmi-row">
+                <div class="jquery-ui-bmi-cell">
+                    <div>Зріст (см)</div>
+                    <div id="jquery-ui-bmi-height" class="jquery-ui-bmi-slider"></div>
+                </div>
+                <div class="jquery-ui-bmi-cell">
+                    <div>Вага (кг)</div>
+                    <div id="jquery-ui-bmi-weight" class="jquery-ui-bmi-slider"></div>
+                </div>
+            </div>
+        </div>
+        
+        <script type="text/javascript" src="js/libs/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="js/libs/jquery-ui-1.11.0.min.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.bmi.js"></script>
+    </body>
+</html>

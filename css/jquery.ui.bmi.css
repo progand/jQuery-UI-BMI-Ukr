@@ -1,0 +1,20 @@
+.jquery-ui-bmi div{
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.jquery-ui-bmi .jquery-ui-bmi-header{
+    font-size: 1.1em;
+}
+
+.jquery-ui-bmi .jquery-ui-bmi-cell{
+    width: 49%;
+    display: inline-block;
+    text-align: center;
+}
+
+.jquery-ui-bmi .jquery-ui-bmi-slider{
+    height: 200px;
+    margin: 0 auto;
+}
