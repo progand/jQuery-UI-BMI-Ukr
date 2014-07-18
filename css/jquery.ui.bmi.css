@@ -2,10 +2,21 @@
     border: none;
     margin: 0;
     padding: 0;
+    line-height: 1.5em;
 }
 
 .jquery-ui-bmi .jquery-ui-bmi-header{
     font-size: 1.1em;
+}
+
+.jquery-ui-bmi .jquery-ui-bmi-content,
+.jquery-ui-bmi .jquery-ui-bmi-header{
+    padding: 0 0.5em;    
+}
+
+.jquery-ui-bmi .jquery-ui-bmi-row{
+    padding: 0.5em 0;    
+    border-bottom: 1px solid #e3e3e3;
 }
 
 .jquery-ui-bmi .jquery-ui-bmi-cell{
@@ -17,4 +28,19 @@
 .jquery-ui-bmi .jquery-ui-bmi-slider{
     height: 200px;
     margin: 0 auto;
+}
+
+.jquery-ui-bmi-results{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.jquery-ui-bmi-results thead{
+    font-weight: bold;        
+    text-align: left;
+    line-height: 1.9em;
+}
+
+.jquery-ui-bmi-results thead th{
+    border-bottom: 1px solid #e3e3e3;
 }
