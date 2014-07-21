@@ -93,7 +93,7 @@
             content += "            <table class=\"jquery-ui-bmi-results\"> ";
             content += "                <thead>";
             content += "                    <tr>";
-            content += "                        <th>Результат<\/th>";
+            content += "                        <th>ІМТ<\/th>";
             content += "                        <th id=\"jquery-ui-bmi-result\">25.97<\/th>";
             content += "                    <\/tr>";
             content += "                <\/thead>";
