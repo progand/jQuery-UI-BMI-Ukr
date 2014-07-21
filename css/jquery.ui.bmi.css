@@ -30,17 +30,21 @@
     margin: 0 auto;
 }
 
+.jquery-ui-bmi-results thead,
+.jquery-ui-bmi-value{    
+    color: #eb8f00;
+    font-weight: bold;        
+}
+
 .jquery-ui-bmi-results{
     width: 100%;
     border-collapse: collapse;
     color: #A7A7A7;
 }
 
-.jquery-ui-bmi-results thead{
-    font-weight: bold;        
+.jquery-ui-bmi-results thead{    
     text-align: left;
     line-height: 1.9em;
-    color: #eb8f00;
 }
 
 .jquery-ui-bmi-results thead th{
