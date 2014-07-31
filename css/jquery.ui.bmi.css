@@ -54,7 +54,7 @@
 .jquery-ui-bmi-results tr{
     transition: all 400ms;
 }
-.jquery-ui-bmi-results .active{
+.jquery-ui-bmi-results .active td{
     color: #1c94c4;
     font-weight: bold;
 }
