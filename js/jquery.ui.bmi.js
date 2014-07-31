@@ -17,27 +17,31 @@
             this.$element.addClass("jquery-ui-bmi").append(content);
 
             //init sliders
+            var onHeightChange = $.proxy(function(event, ui) {
+                    this.$element.find("#jquery-ui-bmi-height-value").text(ui.value);
+                    this._updateResults();
+                }, this);
             this.$element.find("#jquery-ui-bmi-height").slider({
                 orientation: "vertical",
                 range: "min",
                 min: 140,
                 max: 210,
                 value: 175,
-                slide: $.proxy(function(event, ui) {
-                    this.$element.find("#jquery-ui-bmi-height-value").text(ui.value);
-                    this._updateResults();
-                }, this)
+                slide: onHeightChange,
+                change: onHeightChange
             });
+            var onWeightChange = $.proxy(function(event, ui) {
+                    this.$element.find("#jquery-ui-bmi-weight-value").text(ui.value);
+                    this._updateResults();
+                }, this);
             this.$element.find("#jquery-ui-bmi-weight").slider({
                 orientation: "vertical",
                 range: "min",
                 min: 40,
                 max: 180,
                 value: 70,
-                slide: $.proxy(function(event, ui) {
-                    this.$element.find("#jquery-ui-bmi-weight-value").text(ui.value);
-                    this._updateResults();
-                }, this)
+                slide: onWeightChange,
+                change: onWeightChange
             });
 
             this.$element.find("#jquery-ui-bmi-height-value").text(this.$element.find("#jquery-ui-bmi-height").slider("value"));
