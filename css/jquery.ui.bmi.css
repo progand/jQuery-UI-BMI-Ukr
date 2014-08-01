@@ -42,7 +42,18 @@
     font-weight: bold;
     font-size: 1.1em;
 }
-.jquery-ui-bmi div .jquery-ui-bmi-results-diagnosis{
-    
+.jquery-ui-bmi div .jquery-ui-bmi-results-diagnosis{    
     margin: 0.4em 0;
+}
+.jquery-ui-bmi-results-diagnosis[data-interval-min='0']{
+    color: yellow;
+}
+.jquery-ui-bmi-results-diagnosis[data-interval-min='18.5']{
+    color: green;
+}
+.jquery-ui-bmi-results-diagnosis[data-interval-min='25']{
+    color: orange;
+}
+.jquery-ui-bmi-results-diagnosis[data-interval-min='25']{
+    color: dar;
 }
