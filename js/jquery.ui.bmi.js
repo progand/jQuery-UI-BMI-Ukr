@@ -2,6 +2,20 @@
     $.widget("ukr.bmi", {
         //default options
         options: {
+            intervals: [
+                {min: 0, max: 18.5, text: "нижче норми"},
+                {min: 18.5, max: 25, text: "норма"},
+                {min: 25, max: 30, text: "зайва вага"},
+                {min: 30, max: 35, text: "ожиріння 1 ступеня"},
+                {min: 35, max: 40, text: "ожиріння 2 ступеня"},
+                {min: 40, max: Math.Infinity, text: "ожиріння 3 ступеня"}
+            ],
+            minHeight: 150,
+            maxHeight: 195,
+            height: 183,
+            minWeight: 45,
+            maxWeight: 170,
+            weight: 87
         },
         //plugin constructor
         _create: function() {
@@ -18,30 +32,35 @@
 
             //init sliders
             var onHeightChange = $.proxy(function(event, ui) {
-                    this.$element.find("#jquery-ui-bmi-height-value").text(ui.value);
-                    this._updateResults();
-                }, this);
+                this.$element.find("#jquery-ui-bmi-height-value").text(ui.value);
+                this._updateResults();
+            }, this);
             this.$element.find("#jquery-ui-bmi-height").slider({
                 orientation: "vertical",
                 range: "min",
-                min: 140,
-                max: 210,
-                value: 175,
+                min: this.options.minHeight,
+                max: this.options.maxHeight,
+                value: this.options.height,
                 slide: onHeightChange,
                 change: onHeightChange
             });
             var onWeightChange = $.proxy(function(event, ui) {
-                    this.$element.find("#jquery-ui-bmi-weight-value").text(ui.value);
-                    this._updateResults();
-                }, this);
+                this.$element.find("#jquery-ui-bmi-weight-value").text(ui.value);
+                this._updateResults();
+            }, this);
             this.$element.find("#jquery-ui-bmi-weight").slider({
                 orientation: "vertical",
                 range: "min",
-                min: 40,
-                max: 180,
-                value: 70,
+                min: this.options.minWeight,
+                max: this.options.maxWeight,
+                value: this.options.weight,
                 slide: onWeightChange,
                 change: onWeightChange
+            });
+
+            //init progress bar
+            $("#jquery-ui-bmi-results-progress").progressbar({
+                max: this.options.maxWeight / Math.pow((this.options.minHeight / 100), 2)
             });
 
             this.$element.find("#jquery-ui-bmi-height-value").text(this.$element.find("#jquery-ui-bmi-height").slider("value"));
@@ -55,34 +74,36 @@
             this.$element.find(".jquery-ui-bmi-header").remove();
             this.$element.find(".jquery-ui-bmi-content").remove();
             this.$element.removeClass("jquery-ui-bmi");
-            
+
             return this.$element;
         },
         _updateResults: function() {
             var height = this.$element.find("#jquery-ui-bmi-height").slider("value");
             var weight = this.$element.find("#jquery-ui-bmi-weight").slider("value");
             var bmi = weight / Math.pow((height / 100), 2);
+
             //update text value
             this.$element.find("#jquery-ui-bmi-result").text(bmi.toFixed(2));
-            //update diagnosis row
-            this.$element.find("#jquery-ui-bmi-results-diagnosis tr").removeClass("active");
-            if (bmi < 18.5) {
-                this.$element.find("#jquery-ui-bmi-results-diagnosis tr").eq(0).addClass("active");
-            } else if (bmi < 25) {
-                this.$element.find("#jquery-ui-bmi-results-diagnosis tr").eq(1).addClass("active");
-            } else if (bmi < 30) {
-                this.$element.find("#jquery-ui-bmi-results-diagnosis tr").eq(2).addClass("active");
-            } else if (bmi < 35) {
-                this.$element.find("#jquery-ui-bmi-results-diagnosis tr").eq(3).addClass("active");
-            } else if (bmi < 40) {
-                this.$element.find("#jquery-ui-bmi-results-diagnosis tr").eq(4).addClass("active");
-            } else {
-                this.$element.find("#jquery-ui-bmi-results-diagnosis tr").eq(5).addClass("active");
+
+            //find interval
+            var mathedIntervals = $.grep(this.options.intervals, function(interval) {
+                return interval.min <= bmi && bmi < interval.max;
+            });
+            if (mathedIntervals.length > 0) {
+                var mathedInterval = mathedIntervals[0];
+
+                //update diagnosis test
+                this.$element.find("#jquery-ui-bmi-results-diagnosis")
+                        .text("ІМТ від " + mathedInterval.min + " до " 
+                        + mathedInterval.max + " - " + mathedInterval.text);
+
+                //update progress bar
+                $("#jquery-ui-bmi-results-progress").progressbar("value", bmi);
             }
         },
         _getInnerHTMLAsString: function() {
             var content = "";
-            content += "            <div class=\"jquery-ui-bmi-header ui-state-default\">Визначте індекс маси свого тіла<\/div>";
+            content += "            <div class=\"jquery-ui-bmi-header\">Визначте індекс маси свого тіла<\/div>";
             content += "            <div class=\"jquery-ui-bmi-content\">";
             content += "                <div class=\"jquery-ui-bmi-row\">";
             content += "                <div class=\"jquery-ui-bmi-cell\">";
@@ -94,96 +115,23 @@
             content += "                    <div id=\"jquery-ui-bmi-weight\" class=\"jquery-ui-bmi-slider\"><\/div>";
             content += "                <\/div>";
             content += "            <\/div>  ";
-            content += "            <table class=\"jquery-ui-bmi-results\"> ";
-            content += "                <thead>";
-            content += "                    <tr>";
-            content += "                        <th>ІМТ<\/th>";
-            content += "                        <th id=\"jquery-ui-bmi-result\">25.97<\/th>";
-            content += "                    <\/tr>";
-            content += "                <\/thead>";
-            content += "                <tbody id=\"jquery-ui-bmi-results-diagnosis\">                    ";
-            content += "                    <tr>";
-            content += "                        <td>нижче норми<\/td>";
-            content += "                        <td>менше 18.5<\/td>";
-            content += "                    <\/tr>";
-            content += "                    <tr>";
-            content += "                        <td>норма<\/td>";
-            content += "                        <td>від 18.5 до 25<\/td>";
-            content += "                    <\/tr>";
-            content += "                    <tr>";
-            content += "                        <td>зайва вага<\/td>";
-            content += "                        <td>від 25 до 30<\/td>";
-            content += "                    <\/tr>";
-            content += "                    <tr>";
-            content += "                        <td>ожиріння 1 стадії<\/td>";
-            content += "                        <td>від 30 до 35<\/td>";
-            content += "                    <\/tr>";
-            content += "                    <tr>";
-            content += "                        <td>ожиріння 2 стадії<\/td>";
-            content += "                        <td>від 35 до 40<\/td>";
-            content += "                    <\/tr>";
-            content += "                    <tr>";
-            content += "                        <td>ожиріння 3 стадії<\/td>";
-            content += "                        <td>понад 40<\/td>";
-            content += "                    <\/tr>";
+            content += "            <div class=\"jquery-ui-bmi-results\"> ";
+            content += "                <div>";
+            content += "                    <div class=\"jquery-ui-bmi-results-bmi-row\">";
+            content += "                        <span>ІМТ<\/span>";
+            content += "                        <span id=\"jquery-ui-bmi-result\">25.97<\/span>";
+            content += "                    <\/div>";
+            content += "                <\/div>";
+            content += "                <div>                    ";
+            content += "                    <div>";
+            content += "                        <div id=\"jquery-ui-bmi-results-progress\" class=\"jquery-ui-bmi-results-progress\"><\/div>";
+            content += "                        <div id=\"jquery-ui-bmi-results-diagnosis\" class=\"jquery-ui-bmi-results-diagnosis\"><\/div>";
+            content += "                    <\/div>";
             content += "                <\/tbody>";
-            content += "            <\/table>";
+            content += "            <\/div>";
             content += "            <\/div>  ";
 
             return content;
         }
     });
-
-    function updateResults() {
-        var height = $("#jquery-ui-bmi-height").slider("value");
-        var weight = $("#jquery-ui-bmi-weight").slider("value");
-        var bmi = weight / Math.pow((height / 100), 2);
-
-        //update text value
-        $("#jquery-ui-bmi-result").text(bmi.toFixed(2));
-
-        //update diagnosis row
-        $("#jquery-ui-bmi-results-diagnosis tr").removeClass("active");
-        if (bmi < 18.5) {
-            $("#jquery-ui-bmi-results-diagnosis tr").eq(0).addClass("active");
-        } else if (bmi < 25) {
-            $("#jquery-ui-bmi-results-diagnosis tr").eq(1).addClass("active");
-        } else if (bmi < 30) {
-            $("#jquery-ui-bmi-results-diagnosis tr").eq(2).addClass("active");
-        } else if (bmi < 35) {
-            $("#jquery-ui-bmi-results-diagnosis tr").eq(3).addClass("active");
-        } else if (bmi < 40) {
-            $("#jquery-ui-bmi-results-diagnosis tr").eq(4).addClass("active");
-        } else {
-            $("#jquery-ui-bmi-results-diagnosis tr").eq(5).addClass("active");
-        }
-    }
-
-    $("#jquery-ui-bmi-height").slider({
-        orientation: "vertical",
-        range: "min",
-        min: 140,
-        max: 210,
-        value: 175,
-        slide: function(event, ui) {
-            $("#jquery-ui-bmi-height-value").text(ui.value);
-            updateResults();
-        }
-    });
-    $("#jquery-ui-bmi-weight").slider({
-        orientation: "vertical",
-        range: "min",
-        min: 40,
-        max: 180,
-        value: 70,
-        slide: function(event, ui) {
-            $("#jquery-ui-bmi-weight-value").text(ui.value);
-            updateResults();
-        }
-    });
-
-    $("#jquery-ui-bmi-height-value").text($("#jquery-ui-bmi-height").slider("value"));
-    $("#jquery-ui-bmi-weight-value").text($("#jquery-ui-bmi-weight").slider("value"));
-    updateResults();
-
 })(jQuery);
