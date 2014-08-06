@@ -44,16 +44,23 @@
 }
 .jquery-ui-bmi div .jquery-ui-bmi-results-diagnosis{    
     margin: 0.4em 0;
+    font-weight: bold;
 }
 .jquery-ui-bmi-results-diagnosis[data-interval-min='0']{
-    color: yellow;
+    color: rgb(149, 155, 0);
 }
 .jquery-ui-bmi-results-diagnosis[data-interval-min='18.5']{
     color: green;
 }
 .jquery-ui-bmi-results-diagnosis[data-interval-min='25']{
-    color: orange;
+    color: #FFAD00;
 }
-.jquery-ui-bmi-results-diagnosis[data-interval-min='25']{
-    color: dar;
+.jquery-ui-bmi-results-diagnosis[data-interval-min='30']{
+    color: rgb(255, 115, 71);
+}
+.jquery-ui-bmi-results-diagnosis[data-interval-min='35']{
+    color: red;
+}
+.jquery-ui-bmi-results-diagnosis[data-interval-min='40']{
+    color: darkred;
 }
