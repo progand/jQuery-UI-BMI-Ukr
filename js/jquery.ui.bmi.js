@@ -94,6 +94,7 @@
 
                 //update diagnosis test
                 this.$element.find("#jquery-ui-bmi-results-diagnosis")
+                        .attr("data-interval-min", mathedInterval.min)
                         .text("ІМТ від " + mathedInterval.min + " до " 
                         + mathedInterval.max + " - " + mathedInterval.text);
 
