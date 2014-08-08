@@ -73,7 +73,13 @@
                 max: this.options.maxWeight,
                 value: weight,
                 slide: onWeightChange,
-                change: onWeightChange
+                change: $.proxy(function(event, ui){
+                    onWeightChange(event, ui);
+                    this._save({
+                        height: this.$element.find("#jquery-ui-bmi-height").slider("value"),
+                        weight: this.$element.find("#jquery-ui-bmi-weight").slider("value")
+                    });
+                }, this)
             });
 
             //init progress bar
@@ -113,10 +119,16 @@
 
                 //update diagnosis test
                 this.$element.find("#jquery-ui-bmi-results-diagnosis")
-                        .attr("data-interval-min", mathedInterval.min)
-                        .text("ІМТ від " + mathedInterval.min + " до "
-                                + mathedInterval.max + " - " + mathedInterval.text);
-
+                        .attr("data-interval-min", mathedInterval.min);                        
+                        var diagnosisHtml = "ІМТ від " + mathedInterval.min + " до "
+                                + mathedInterval.max + " - " + mathedInterval.text + ".";
+                        if(weight >= 25 * Math.pow((height / 100), 2)){
+                            diagnosisHtml += "<br>Потрібно схуднути мінімум на " + (weight - 25 * Math.pow((height / 100), 2)).toFixed(1) + " кг.";
+                        }
+                        if(weight < 18.5 * Math.pow((height / 100), 2)){
+                            diagnosisHtml += "<br>Потрібно набрати мінімум " + (18.5 * Math.pow((height / 100), 2) - weight).toFixed(1) + " кг.";
+                        }
+                this.$element.find("#jquery-ui-bmi-results-diagnosis").html(diagnosisHtml);            
                 //update progress bar
                 $("#jquery-ui-bmi-results-progress").progressbar("value", bmi);
             }
