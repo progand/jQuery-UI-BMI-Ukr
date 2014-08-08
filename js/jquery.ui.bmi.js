@@ -8,7 +8,7 @@
                 {min: 25, max: 30, text: "зайва вага"},
                 {min: 30, max: 35, text: "ожиріння 1 ступеня"},
                 {min: 35, max: 40, text: "ожиріння 2 ступеня"},
-                {min: 40, max: Math.Infinity, text: "ожиріння 3 ступеня"}
+                {min: 40, max: Infinity, text: "ожиріння 3 ступеня"}
             ],
             minHeight: 150,
             maxHeight: 195,
@@ -60,6 +60,7 @@
 
             //init progress bar
             $("#jquery-ui-bmi-results-progress").progressbar({
+                min: 0,
                 max: this.options.maxWeight / Math.pow((this.options.minHeight / 100), 2)
             });
 
@@ -86,11 +87,11 @@
             this.$element.find("#jquery-ui-bmi-result").text(bmi.toFixed(2));
 
             //find interval
-            var mathedIntervals = $.grep(this.options.intervals, function(interval) {
+            var matchedIntervals = $.grep(this.options.intervals, function(interval) {
                 return interval.min <= bmi && bmi < interval.max;
             });
-            if (mathedIntervals.length > 0) {
-                var mathedInterval = mathedIntervals[0];
+            if (matchedIntervals.length > 0) {
+                var mathedInterval = matchedIntervals[0];
 
                 //update diagnosis test
                 this.$element.find("#jquery-ui-bmi-results-diagnosis")
