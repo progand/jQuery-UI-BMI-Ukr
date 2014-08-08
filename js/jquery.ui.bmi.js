@@ -15,7 +15,8 @@
             height: 183,
             minWeight: 45,
             maxWeight: 170,
-            weight: 87
+            weight: 87,
+            useLocalStorage: true
         },
         //plugin constructor
         _create: function() {
@@ -29,6 +30,17 @@
             //set content
             var content = this._getInnerHTMLAsString();
             this.$element.addClass("jquery-ui-bmi").append(content);
+            
+            //read saved value
+            var height = this.options.height;
+            var weight = this.options.weight;
+            if(this.options.useLocalStorage){
+                var savedObject = this._read();
+                if(savedObject){
+                    height = savedObject.height || height;
+                    weight = savedObject.weight || weight;
+                }
+            }
 
             //init sliders
             var onHeightChange = $.proxy(function(event, ui) {
@@ -40,9 +52,15 @@
                 range: "min",
                 min: this.options.minHeight,
                 max: this.options.maxHeight,
-                value: this.options.height,
+                value: height,
                 slide: onHeightChange,
-                change: onHeightChange
+                change: $.proxy(function(event, ui){
+                    onHeightChange(event, ui);
+                    this._save({
+                        height: this.$element.find("#jquery-ui-bmi-height").slider("value"),
+                        weight: this.$element.find("#jquery-ui-bmi-weight").slider("value")
+                    });
+                }, this)
             });
             var onWeightChange = $.proxy(function(event, ui) {
                 this.$element.find("#jquery-ui-bmi-weight-value").text(ui.value);
@@ -53,7 +71,7 @@
                 range: "min",
                 min: this.options.minWeight,
                 max: this.options.maxWeight,
-                value: this.options.weight,
+                value: weight,
                 slide: onWeightChange,
                 change: onWeightChange
             });
@@ -96,8 +114,8 @@
                 //update diagnosis test
                 this.$element.find("#jquery-ui-bmi-results-diagnosis")
                         .attr("data-interval-min", mathedInterval.min)
-                        .text("ІМТ від " + mathedInterval.min + " до " 
-                        + mathedInterval.max + " - " + mathedInterval.text);
+                        .text("ІМТ від " + mathedInterval.min + " до "
+                                + mathedInterval.max + " - " + mathedInterval.text);
 
                 //update progress bar
                 $("#jquery-ui-bmi-results-progress").progressbar("value", bmi);
@@ -134,6 +152,22 @@
             content += "            <\/div>  ";
 
             return content;
+        },
+        _save: function(saveObject) {
+            try {
+                localStorage.setItem("jquery-ui-bmi-last-parameters", JSON.stringify(saveObject));                
+                return true;
+            } catch (e) {
+                return false;
+            }
+        },
+        _read: function(){
+            try {
+                var savedObject = JSON.parse(localStorage.getItem("jquery-ui-bmi-last-parameters"));                
+                return savedObject;
+            } catch (e) {
+                return null;
+            }
         }
     });
 })(jQuery);
