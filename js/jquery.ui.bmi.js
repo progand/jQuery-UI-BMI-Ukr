@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
     $.widget("ukr.bmi", {
         //default options
         options: {
@@ -10,7 +10,7 @@
                 {min: 35, max: 40, text: "ожиріння 2 ступеня"},
                 {min: 40, max: Infinity, text: "ожиріння 3 ступеня"}
             ],
-            minHeight: 150,
+            minHeight: 140,
             maxHeight: 195,
             height: 183,
             minWeight: 45,
@@ -19,7 +19,7 @@
             useLocalStorage: true
         },
         //plugin constructor
-        _create: function() {
+        _create: function () {
             var self = this,
                     o = self.options,
                     el = self.element;
@@ -30,21 +30,21 @@
             //set content
             var content = this._getInnerHTMLAsString();
             this.$element.addClass("jquery-ui-bmi").append(content);
-            
+
             //read saved value
             var height = this.options.height;
             var weight = this.options.weight;
-            if(this.options.useLocalStorage){
+            if (this.options.useLocalStorage) {
                 var savedObject = this._read();
-                if(savedObject){
+                if (savedObject) {
                     height = savedObject.height || height;
                     weight = savedObject.weight || weight;
                 }
             }
 
             //init sliders
-            var onHeightChange = $.proxy(function(event, ui) {
-                this.$element.find("#jquery-ui-bmi-height-value").text(ui.value);
+            var onHeightChange = $.proxy(function (event, ui) {
+                this.$element.find("#jquery-ui-bmi-height-value").val(ui.value);
                 this._updateResults();
             }, this);
             this.$element.find("#jquery-ui-bmi-height").slider({
@@ -54,7 +54,7 @@
                 max: this.options.maxHeight,
                 value: height,
                 slide: onHeightChange,
-                change: $.proxy(function(event, ui){
+                change: $.proxy(function (event, ui) {
                     onHeightChange(event, ui);
                     this._save({
                         height: this.$element.find("#jquery-ui-bmi-height").slider("value"),
@@ -62,8 +62,8 @@
                     });
                 }, this)
             });
-            var onWeightChange = $.proxy(function(event, ui) {
-                this.$element.find("#jquery-ui-bmi-weight-value").text(ui.value);
+            var onWeightChange = $.proxy(function (event, ui) {
+                this.$element.find("#jquery-ui-bmi-weight-value").val(ui.value);
                 this._updateResults();
             }, this);
             this.$element.find("#jquery-ui-bmi-weight").slider({
@@ -73,7 +73,7 @@
                 max: this.options.maxWeight,
                 value: weight,
                 slide: onWeightChange,
-                change: $.proxy(function(event, ui){
+                change: $.proxy(function (event, ui) {
                     onWeightChange(event, ui);
                     this._save({
                         height: this.$element.find("#jquery-ui-bmi-height").slider("value"),
@@ -88,12 +88,27 @@
                 max: this.options.maxWeight / Math.pow((this.options.minHeight / 100), 2)
             });
 
-            this.$element.find("#jquery-ui-bmi-height-value").text(this.$element.find("#jquery-ui-bmi-height").slider("value"));
-            this.$element.find("#jquery-ui-bmi-weight-value").text(this.$element.find("#jquery-ui-bmi-weight").slider("value"));
+            //init text input lesteners
+            var onTextInputChange = $.proxy(function (evt) {
+                var id = String(evt.target.id).toLowerCase(),
+                        value = Number($(evt.target).val()),
+                        parameter = id.indexOf("height") >= 0 ? "height" : "weight";
+
+                if (isNaN(value)) {
+                        alert("Дозволяється вводити лише числа");
+                }                
+
+                this.$element.find("#jquery-ui-bmi-" + parameter).slider("value", value);
+
+            }, this);
+            this.$element.on("change", "input.jquery-ui-bmi-value", onTextInputChange);
+
+            this.$element.find("#jquery-ui-bmi-height-value").val(this.$element.find("#jquery-ui-bmi-height").slider("value"));
+            this.$element.find("#jquery-ui-bmi-weight-value").val(this.$element.find("#jquery-ui-bmi-weight").slider("value"));
             this._updateResults();
         },
         //plugin destructor
-        destroy: function() {
+        destroy: function () {
             this.$element.find("#jquery-ui-bmi-height").slider("destroy");
             this.$element.find("#jquery-ui-bmi-weight").slider("destroy");
             this.$element.find(".jquery-ui-bmi-header").remove();
@@ -102,7 +117,7 @@
 
             return this.$element;
         },
-        _updateResults: function() {
+        _updateResults: function () {
             var height = this.$element.find("#jquery-ui-bmi-height").slider("value");
             var weight = this.$element.find("#jquery-ui-bmi-weight").slider("value");
             var bmi = weight / Math.pow((height / 100), 2);
@@ -111,7 +126,7 @@
             this.$element.find("#jquery-ui-bmi-result").text(bmi.toFixed(2));
 
             //find interval
-            var matchedIntervals = $.grep(this.options.intervals, function(interval) {
+            var matchedIntervals = $.grep(this.options.intervals, function (interval) {
                 return interval.min <= bmi && bmi < interval.max;
             });
             if (matchedIntervals.length > 0) {
@@ -119,31 +134,31 @@
 
                 //update diagnosis test
                 this.$element.find("#jquery-ui-bmi-results-diagnosis")
-                        .attr("data-interval-min", mathedInterval.min);                        
-                        var diagnosisHtml = "ІМТ від " + mathedInterval.min + " до "
-                                + mathedInterval.max + " - " + mathedInterval.text + ".";
-                        if(weight >= 25 * Math.pow((height / 100), 2)){
-                            diagnosisHtml += "<br>Потрібно схуднути мінімум на " + (weight - 25 * Math.pow((height / 100), 2)).toFixed(1) + " кг.";
-                        }
-                        if(weight < 18.5 * Math.pow((height / 100), 2)){
-                            diagnosisHtml += "<br>Потрібно набрати мінімум " + (18.5 * Math.pow((height / 100), 2) - weight).toFixed(1) + " кг.";
-                        }
-                this.$element.find("#jquery-ui-bmi-results-diagnosis").html(diagnosisHtml);            
+                        .attr("data-interval-min", mathedInterval.min);
+                var diagnosisHtml = "ІМТ від " + mathedInterval.min + " до "
+                        + mathedInterval.max + " - " + mathedInterval.text + ".";
+                if (weight >= 25 * Math.pow((height / 100), 2)) {
+                    diagnosisHtml += "<br>Потрібно схуднути мінімум на " + (weight - 25 * Math.pow((height / 100), 2)).toFixed(1) + " кг.";
+                }
+                if (weight < 18.5 * Math.pow((height / 100), 2)) {
+                    diagnosisHtml += "<br>Потрібно набрати мінімум " + (18.5 * Math.pow((height / 100), 2) - weight).toFixed(1) + " кг.";
+                }
+                this.$element.find("#jquery-ui-bmi-results-diagnosis").html(diagnosisHtml);
                 //update progress bar
                 $("#jquery-ui-bmi-results-progress").progressbar("value", bmi);
             }
         },
-        _getInnerHTMLAsString: function() {
+        _getInnerHTMLAsString: function () {
             var content = "";
             content += "            <div class=\"jquery-ui-bmi-header\">Визначте індекс маси свого тіла<\/div>";
             content += "            <div class=\"jquery-ui-bmi-content\">";
             content += "                <div class=\"jquery-ui-bmi-row\">";
             content += "                <div class=\"jquery-ui-bmi-cell\">";
-            content += "                    <div>Зріст <span id=\"jquery-ui-bmi-height-value\" class=\"jquery-ui-bmi-value\"><\/span> см<\/div>";
+            content += "                    <div>Зріст <input type=\"number\" id=\"jquery-ui-bmi-height-value\" class=\"jquery-ui-bmi-value\"> см<\/div>";
             content += "                    <div id=\"jquery-ui-bmi-height\" class=\"jquery-ui-bmi-slider\"><\/div>";
             content += "                <\/div>";
             content += "                <div class=\"jquery-ui-bmi-cell\">";
-            content += "                    <div>Вага <span id=\"jquery-ui-bmi-weight-value\" class=\"jquery-ui-bmi-value\"><\/span> кг<\/div>";
+            content += "                    <div>Вага <input type=\"number\" id=\"jquery-ui-bmi-weight-value\" class=\"jquery-ui-bmi-value\"> кг<\/div>";
             content += "                    <div id=\"jquery-ui-bmi-weight\" class=\"jquery-ui-bmi-slider\"><\/div>";
             content += "                <\/div>";
             content += "            <\/div>  ";
@@ -165,17 +180,17 @@
 
             return content;
         },
-        _save: function(saveObject) {
+        _save: function (saveObject) {
             try {
-                localStorage.setItem("jquery-ui-bmi-last-parameters", JSON.stringify(saveObject));                
+                localStorage.setItem("jquery-ui-bmi-last-parameters", JSON.stringify(saveObject));
                 return true;
             } catch (e) {
                 return false;
             }
         },
-        _read: function(){
+        _read: function () {
             try {
-                var savedObject = JSON.parse(localStorage.getItem("jquery-ui-bmi-last-parameters"));                
+                var savedObject = JSON.parse(localStorage.getItem("jquery-ui-bmi-last-parameters"));
                 return savedObject;
             } catch (e) {
                 return null;

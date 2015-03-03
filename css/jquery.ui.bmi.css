@@ -36,6 +36,11 @@
     font-weight: bold;        
 }
 
+.jquery-ui-bmi-value{
+    width: 50px;
+    
+}
+
 .jquery-ui-bmi-results-bmi-row{    
     color: #A7A7A7;
     text-align: center;    
